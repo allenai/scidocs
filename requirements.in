@@ -3,3 +3,4 @@ pandas
 scikit-learn
 sklearn-contrib-lightning
 pytrec_eval
+allennlp=0.9
