@@ -1,0 +1,5 @@
+numpy
+pandas
+scikit-learn
+sklearn-contrib-lightning
+pytrec_eval
