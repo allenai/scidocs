@@ -9,6 +9,7 @@ from allennlp.data.dataset_readers.dataset_reader import DatasetReader
 from allennlp.models import archival
 
 import json
+import shutil
 
 import tqdm
 
@@ -57,7 +58,7 @@ def evaluate_ranking_performance(archive_path, test_data_path, cuda_device, outp
     output = []
 
     for line in tqdm.tqdm(clicks):
-        [session_id, dt, query_id, clicked_id, clicked_pdf, other_id_str] = line.split('\t')
+        [query_id, clicked_id, other_id_str] = list(csv.reader([line], delimiter=',', quotechar='"'))[0]
 
         other_ids = other_id_str.strip().split(",")
         position = 1
@@ -121,35 +122,19 @@ def evaluate_ranking_performance(archive_path, test_data_path, cuda_device, outp
             writer.write_all(output)
     return metrics
 
-def get_simpaper_metrics(data_dir, embeddings_path, run_dir, cuda_device):
+def get_simpaper_metrics(test_data_path, config_path, embeddings_path, run_dir, cuda_device, num_dims):
    #train allennlp model on given embeddings, write to archive file in run path:
     os.environ['CUDA_DEVICE'] = cuda_device
     os.environ['EMBEDDINGS_PATH'] = embeddings_path
+    os.environ['EMBEDDINGS_DIM'] = num_dims
     os.environ['jsonlines_embedding_format'] = "true"
-    config_path = os.path.join(data_dir, "config")
+    serialization_dir = os.path.join(run_dir, "recomm-tmp")
+    simpapers_model_path = os.path.join(serialization_dir, "model.tar.gz")
+    shutil.rmtree(serialization_dir, ignore_errors=True)
     command = \
         ['allennlp',
-         'train', config_path, '-s', run_dir,
-         '--include-package', 's2_recommender']
+         'train', config_path, '-s', serialization_dir,
+         '--include-package', 'scidocs.recommender']
     subprocess.run(command)
-    metrics = evaluate_ranking_performance(simpapers_model_path, config['simpapers_test'], int(cuda_device))
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    # parser.add_argument('d', type=str, help='Model serialization directory')
-    parser.add_argument('model_archive_path', help='Model archive path')
-    parser.add_argument('test_data_path', help='Path to the test file')
-    parser.add_argument('--output-rankings-path', help='Path to output rankings')
-    parser.add_argument('--cuda-device', dest='cuda_device', default=0, type=int, help='cuda device')
-    parser.add_argument('--paper-features-path-override', help='Path to paper features path, will override config')
-    parser.add_argument('--paper-embeddings-path-override', help='Path to paper embeddings, will override config')
-
-    args = parser.parse_args()
-
-    metrics = evaluate_ranking_performance(args.model_archive_path, args.test_data_path, args.cuda_device, args.output_rankings_path,
-                                           args.paper_features_path_override, args.paper_embeddings_path_override)
-
-    for name, value in metrics.items():
-        print(f"{name}: {value:.3f}")
-
+    metrics = evaluate_ranking_performance(simpapers_model_path, test_data_path, int(cuda_device), num_dims)
+    return metrics

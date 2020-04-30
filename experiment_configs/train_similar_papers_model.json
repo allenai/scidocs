@@ -1,0 +1,68 @@
+local stringToBool(s) =
+  if s == "true" then true
+  else if s == "false" then false
+  else error "invalid boolean: " + std.manifestJson(s);
+local EMBEDDINGS_PATH = std.extVar("EMBEDDINGS_PATH");
+local CUDA_DEVICE = std.parseInt(std.extVar("CUDA_DEVICE"));
+local EMBEDDINGS_DIM = std.parseInt(std.extVar("EMBEDDINGS_DIM"));
+{
+    "random_seed": 7,
+    "pytorch_seed": 7,
+    "numpy_seed": 7,
+    "dataset_reader": {
+      "type": "simclick_data_reader",
+      "paper_features_path": "/net/s2-research/recommender/scidocs_v1/recomm/paper_metadata.json",
+      "paper_embeddings_path": EMBEDDINGS_PATH,
+      "max_results_per_query": 10,
+      "jsonlines_embedding_format": stringToBool(std.extVar('jsonlines_embedding_format'))
+    },
+
+    "train_data_path": "/net/s2-research/recommender/scidocs_v1/recomm/train.csv",
+    "validation_data_path": "/net/s2-research/recommender/scidocs_v1/recomm/val.csv",
+    "test_data_path": "/net/s2-research/recommender/scidocs_v1/recomm/test.csv",
+    "evaluate_on_test": true,
+    "model": {
+      "type": "simpaper_recommender",
+      "paper_to_vec_dropout": 0.4,
+      "ranking_loss_margin": 0.1,
+      "paper_embeddings_size": EMBEDDINGS_DIM,
+       "encode_title": false, #true is somewhat more accurate, but takes 5x longer to train
+       "project_query": false,
+      "text_field_embedder": {
+        "token_embedders": {
+          "tokens": {
+            "type": "embedding",
+            "embedding_dim": 50,
+            "trainable": true
+          }
+        },
+      },
+      "propensity_score_path": "/net/nfs.corp/s2-research/recommender/prop_scores_v20190521.json",
+      "text_encoder": {
+        "type": "boe",
+        "embedding_dim": 50,
+        "averaged": true
+      },
+      "feedforward": {
+        "input_dim": 11, # 2 * text embedding size + 4 extra features = 104
+        "num_layers": 2,
+        "hidden_dims": [50, 1],
+        "activations": ["relu", "sigmoid"],
+        "dropout": [0.4, 0.0]
+      }
+    },
+    "iterator": {
+      "type": "basic",
+      "batch_size": 128
+    },
+    "trainer": {
+      "num_epochs": 5,
+      "grad_clipping": 5.0,
+      "patience": 10,
+      "cuda_device": CUDA_DEVICE,
+      "optimizer": {
+        "type": "adadelta",
+        "rho": 0.95
+      }
+    }
+  }
