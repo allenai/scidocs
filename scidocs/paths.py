@@ -36,4 +36,6 @@ class DataPaths:
         self.recomm_test = os.path.join(base_path, 'recomm', 'test.csv')
         self.recomm_propensity_scores = os.path.join(base_path, 'recomm', 'propensity_scores.json')
         
-        self.paper_metadata = os.path.join(base_path, 'paper_metadata.json')
+        self.paper_metadata_view_cite_read = os.path.join(base_path, 'paper_metadata_paper_metadata_view_cite_read.json')
+        self.paper_metadata_mag_mesh = os.path.join(base_path, 'paper_metadata_mag_mesh.json')
+        self.paper_metadata_recomm = os.path.join(base_path, 'paper_metadata_mag_mesh.json')
