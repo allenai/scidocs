@@ -7,6 +7,10 @@ import subprocess
 
 from allennlp.data.dataset_readers.dataset_reader import DatasetReader
 from allennlp.models import archival
+import scidocs.recommender.simclick_data_reader
+import scidocs.recommender.simpaper_recommender
+from scidocs.recommender.simpaper_recommender import SimpaperRecommender
+import csv
 
 import json
 import shutil

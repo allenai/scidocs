@@ -37,7 +37,7 @@ local EMBEDDINGS_DIM = std.parseInt(std.extVar("EMBEDDINGS_DIM"));
           }
         },
       },
-      "propensity_score_path": "/net/nfs.corp/s2-research/recommender/prop_scores_v20190521.json",
+      "propensity_score_path": "/net/s2-research/recommender/scidocs_v1/recomm/propensity_scores.json",
       "text_encoder": {
         "type": "boe",
         "embedding_dim": 50,
