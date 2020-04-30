@@ -7,7 +7,7 @@ from scidocs.simpaper_click_eval import get_simpaper_metrics
 
 
 # embeddings for all (currently not used)
-# embeddings_path = '/net/s2-research/recommender/scidocs_v1/paper_metadata_embedded.jsonl'
+embeddings_path = '/net/s2-research/recommender/scidocs_v1/paper_metadata_embedded.jsonl'
 # embeddings = load_embeddings_from_jsonl(embeddings_path)
 
 # all of the data paths
@@ -49,12 +49,8 @@ run_path = '/tmp/temp.run'
 # cocite_results = get_qrel_metrics(data_paths.cocite_test, run_path, metrics=('ndcg', 'map'))
 
 
-embeddings_path = '/Users/dougd/Data/cite1hop-no-venue-simpapers.jsonl'
-# print("loading embeddings")
-# embeddings_qrel = load_embeddings_from_jsonl(embeddings_path)
-# print("done loading embeddings")
-simpaper_results = get_simpaper_metrics(data_paths.recomm_test, data_paths.recomm_config, embeddings_path, run_path, "-1", "768")
 #TODO read dims from embeddings
+simpaper_results = get_simpaper_metrics(data_paths.recomm_test, data_paths.recomm_config, embeddings_path, run_path, "-1", "768")
 
 print(simpaper_results)
 
