@@ -5,21 +5,27 @@ local stringToBool(s) =
 local EMBEDDINGS_PATH = std.extVar("EMBEDDINGS_PATH");
 local CUDA_DEVICE = std.parseInt(std.extVar("CUDA_DEVICE"));
 local EMBEDDINGS_DIM = std.parseInt(std.extVar("EMBEDDINGS_DIM"));
+local PAPER_METADATA_PATH = std.extVar("PAPER_METADATA_PATH");
+local TRAIN_PATH = std.extVar("TRAIN_PATH");
+local VALID_PATH = std.extVar("VALID_PATH");
+local TEST_PATH = std.extVar("TEST_PATH");
+local PROP_SCORE_PATH = std.extVar("PROP_SCORE_PATH");
+
 {
     "random_seed": 7,
     "pytorch_seed": 7,
     "numpy_seed": 7,
     "dataset_reader": {
       "type": "simclick_data_reader",
-      "paper_features_path": "/net/s2-research/recommender/scidocs_v1/recomm/paper_metadata.json",
+      "paper_features_path": PAPER_METADATA_PATH,
       "paper_embeddings_path": EMBEDDINGS_PATH,
       "max_results_per_query": 10,
       "jsonlines_embedding_format": stringToBool(std.extVar('jsonlines_embedding_format'))
     },
 
-    "train_data_path": "/net/s2-research/recommender/scidocs_v1/recomm/train.csv",
-    "validation_data_path": "/net/s2-research/recommender/scidocs_v1/recomm/val.csv",
-    "test_data_path": "/net/s2-research/recommender/scidocs_v1/recomm/test.csv",
+    "train_data_path": TRAIN_PATH,
+    "validation_data_path": VALID_PATH,
+    "test_data_path": TEST_PATH,
     "evaluate_on_test": true,
     "model": {
       "type": "simpaper_recommender",
@@ -37,7 +43,7 @@ local EMBEDDINGS_DIM = std.parseInt(std.extVar("EMBEDDINGS_DIM"));
           }
         },
       },
-      "propensity_score_path": "/net/s2-research/recommender/scidocs_v1/recomm/propensity_scores.json",
+      "propensity_score_path": PROP_SCORE_PATH,
       "text_encoder": {
         "type": "boe",
         "embedding_dim": 50,

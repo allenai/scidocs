@@ -7,6 +7,7 @@ import subprocess
 
 from allennlp.data.dataset_readers.dataset_reader import DatasetReader
 from allennlp.models import archival
+from scidocs.paths import DataPaths
 import scidocs.recommender.simclick_data_reader
 import scidocs.recommender.simpaper_recommender
 from scidocs.recommender.simpaper_recommender import SimpaperRecommender
@@ -126,11 +127,17 @@ def evaluate_ranking_performance(archive_path, test_data_path, cuda_device, outp
             writer.write_all(output)
     return metrics
 
-def get_simpaper_metrics(test_data_path, config_path, embeddings_path, run_dir, cuda_device, num_dims):
+def get_simpaper_metrics(data_paths:DataPaths, embeddings_path, run_dir, cuda_device, num_dims):
    #train allennlp model on given embeddings, write to archive file in run path:
+    config_path = data_paths.recomm_config
     os.environ['CUDA_DEVICE'] = cuda_device
     os.environ['EMBEDDINGS_PATH'] = embeddings_path
     os.environ['EMBEDDINGS_DIM'] = num_dims
+    os.environ['TRAIN_PATH'] = data_paths.recomm_train
+    os.environ['VALID_PATH'] = data_paths.recomm_val
+    os.environ['TEST_PATH'] = data_paths.recomm_test
+    os.environ['PROP_SCORE_PATH'] = data_paths.recomm_propensity_scores
+    os.environ['PAPER_METADATA_PATH'] = data_paths.recomm_paper_metadata
     os.environ['jsonlines_embedding_format'] = "true"
     serialization_dir = os.path.join(run_dir, "recomm-tmp")
     simpapers_model_path = os.path.join(serialization_dir, "model.tar.gz")
@@ -140,5 +147,5 @@ def get_simpaper_metrics(test_data_path, config_path, embeddings_path, run_dir, 
          'train', config_path, '-s', serialization_dir,
          '--include-package', 'scidocs.recommender']
     subprocess.run(command)
-    metrics = evaluate_ranking_performance(simpapers_model_path, test_data_path, int(cuda_device), num_dims)
+    metrics = evaluate_ranking_performance(simpapers_model_path, data_paths.recomm_test, int(cuda_device), num_dims)
     return metrics
