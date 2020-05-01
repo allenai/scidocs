@@ -8,7 +8,7 @@ except NameError:
     
     
 class DataPaths:
-    def __init__(self, base_path='/net/nfs.corp/s2-research/recommender/scidocs_v1'):
+    def __init__(self, base_path=os.path.join(PROJECT_ROOT_PATH, 'data')):
         self.base_path = base_path
         
         self.cite_val = os.path.join(base_path, 'cite', 'val.qrel')
@@ -36,6 +36,7 @@ class DataPaths:
         self.recomm_test = os.path.join(base_path, 'recomm', 'test.csv')
         self.recomm_config = os.path.join(base_path, 'recomm', 'train_similar_papers_model.json')
         self.recomm_propensity_scores = os.path.join(base_path, 'recomm', 'propensity_scores.json')
-        self.paper_metadata_view_cite_read = os.path.join(base_path, 'paper_metadata_paper_metadata_view_cite_read.json')
+        
+        self.paper_metadata_view_cite_read = os.path.join(base_path, 'paper_metadata_view_cite_read.json')
         self.paper_metadata_mag_mesh = os.path.join(base_path, 'paper_metadata_mag_mesh.json')
         self.paper_metadata_recomm = os.path.join(base_path, 'paper_metadata_recomm.json')

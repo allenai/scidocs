@@ -1,8 +1,42 @@
+import os
 import operator
 import pathlib
 import pytrec_eval
 import numpy as np
 from collections import defaultdict
+from scidocs.embeddings import load_embeddings_from_jsonl
+
+
+def get_view_cite_read_metrics(data_paths, embeddings_path=None):
+    """Run the cocite, coread, coview, cite task evaluations.
+
+    Arguments:
+        data_paths {scidocs.DataPaths} -- A DataPaths objects that points to 
+                                          all of the SciDocs files
+
+    Keyword Arguments:
+        embeddings_path {str} -- Path to the embeddings jsonl (default: {None})
+
+    Returns:
+        metrics {dict} -- NDCG and MAP for all four tasks.
+    """
+    embeddings = load_embeddings_from_jsonl(embeddings_path)
+
+    run_path = os.path.join(data_paths.base_path, 'temp.run')     
+
+    make_run_from_embeddings(data_paths.coview_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
+    coview_results = get_qrel_metrics(data_paths.coview_test, run_path, metrics=('ndcg', 'map'))
+
+    make_run_from_embeddings(data_paths.coread_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
+    coread_results = get_qrel_metrics(data_paths.coread_test, run_path, metrics=('ndcg', 'map'))
+
+    make_run_from_embeddings(data_paths.cite_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
+    cite_results = get_qrel_metrics(data_paths.cite_test, run_path, metrics=('ndcg', 'map'))
+
+    make_run_from_embeddings(data_paths.cocite_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
+    cocite_results = get_qrel_metrics(data_paths.cocite_test, run_path, metrics=('ndcg', 'map'))
+    
+    return {'co-view': coview_results, 'co-read': coread_results, 'cite': cite_results, 'co-cite': cocite_results}
 
 
 def get_qrel_metrics(qrel_file, run_file, metrics=('ndcg', 'map')):
