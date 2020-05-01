@@ -49,6 +49,8 @@ make_run_from_embeddings(data_paths.cocite_test, embeddings_qrel, run_path, topk
 cocite_results = get_qrel_metrics(data_paths.cocite_test, run_path, metrics=('ndcg', 'map'))
 
 
+embeddings_path = '/net/nfs.corp/s2-research/recommender/embeddings/cite1hop-no-venue-simpapers.jsonl'
+embeddings = load_embeddings_from_jsonl(embeddings_path)
 dims = 0
 if len(embeddings) > 0:
     dims = len(next(iter(embeddings.values())))
