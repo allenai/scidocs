@@ -7,7 +7,7 @@ from scidocs.simpaper_click_eval import get_simpaper_metrics
 
 
 #embeddings for all (currently not used)
-embeddings_path = '/net/s2-research/recommender/scidocs_v1/paper_metadata_embedded.jsonl'
+embeddings_path = '/net/nfs.corp/s2-research/recommender/scidocs_v1/paper_metadata_embedded.jsonl'
 embeddings = load_embeddings_from_jsonl(embeddings_path)
 
 # all of the data paths
