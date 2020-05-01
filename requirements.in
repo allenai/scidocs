@@ -1,8 +1,9 @@
 numpy
 pandas
 scikit-learn
+jsonlines
+tqdm
 sklearn-contrib-lightning
 pytrec_eval
 allennlp==0.9
-jsonlines
-tqdm
+awscli

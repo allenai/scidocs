@@ -18,8 +18,7 @@ import shutil
 
 import tqdm
 
-def evaluate_ranking_performance(archive_path, test_data_path, cuda_device, output_ranking_file=None,
-                                 paper_features_path_override=None, paper_embeddings_path_override=None):
+def evaluate_ranking_performance(archive_path, test_data_path, cuda_device):
 
     archive = archival.load_archive(archive_path, cuda_device=cuda_device)
     params = archive.config
@@ -33,11 +32,6 @@ def evaluate_ranking_performance(archive_path, test_data_path, cuda_device, outp
     #adjust to sum to one:
     adjClickDistribution = adjClickDistribution * len(adjClickDistribution) / (
         sum(adjClickDistribution))
-
-    if not paper_features_path_override is None:
-        params['dataset_reader'].params['paper_features_path'] = paper_features_path_override
-    if not paper_embeddings_path_override is None:
-        params['dataset_reader'].params['paper_embeddings_path'] = paper_embeddings_path_override
 
     dr = DatasetReader.from_params(params['dataset_reader'])
 
@@ -118,13 +112,27 @@ def evaluate_ranking_performance(archive_path, test_data_path, cuda_device, outp
         "Adj-mrr": adj_mrr / adj_demonimator,
         "Adj-Rprec/P@1": adj_rprec / adj_demonimator
     }
-    if not output_ranking_file is None:
-        with jsonlines.open(output_ranking_file, mode="w") as writer:
-            writer.write_all(output)
+
     return metrics
 
-def get_simpaper_metrics(data_paths:DataPaths, embeddings_path, run_dir, cuda_device, num_dims):
-   #train allennlp model on given embeddings, write to archive file in run path:
+
+def get_recomm_metrics(data_paths:DataPaths, embeddings_path, cuda_device=-1):
+    """Run the recommendations task evaluation.
+
+    Arguments:
+        data_paths {scidocs.DataPaths} -- A DataPaths objects that points to 
+                                          all of the SciDocs files
+
+    Keyword Arguments:
+        embeddings_path {str} -- Path to the embeddings jsonl (default: {None})
+        cuda_evice {str} -- For the pytorch model -> which cuda device to use
+
+    Returns:
+        metrics {dict} -- adj-NDCG and adj-P@1 for the task.
+    """
+    with open(embeddings_path, 'r') as f:
+        line = json.loads(next(f))
+        num_dims = len(line['embedding'])
     config_path = data_paths.recomm_config
     os.environ['CUDA_DEVICE'] = cuda_device
     os.environ['EMBEDDINGS_PATH'] = embeddings_path
@@ -135,7 +143,7 @@ def get_simpaper_metrics(data_paths:DataPaths, embeddings_path, run_dir, cuda_de
     os.environ['PROP_SCORE_PATH'] = data_paths.recomm_propensity_scores
     os.environ['PAPER_METADATA_PATH'] = data_paths.paper_metadata_recomm
     os.environ['jsonlines_embedding_format'] = "true"
-    serialization_dir = os.path.join(run_dir, "recomm-tmp")
+    serialization_dir = os.path.join(data_paths.base_dir, "recomm-tmp")
     simpapers_model_path = os.path.join(serialization_dir, "model.tar.gz")
     shutil.rmtree(serialization_dir, ignore_errors=True)
     command = \
@@ -143,5 +151,5 @@ def get_simpaper_metrics(data_paths:DataPaths, embeddings_path, run_dir, cuda_de
          'train', config_path, '-s', serialization_dir,
          '--include-package', 'scidocs.recommender']
     subprocess.run(command)
-    metrics = evaluate_ranking_performance(simpapers_model_path, data_paths.recomm_test, int(cuda_device), num_dims)
-    return metrics
+    metrics = evaluate_ranking_performance(simpapers_model_path, data_paths.recomm_test, int(cuda_device))
+    return {'recomm': {'adj-NDCG': metrics['Adj-ndcg'], 'adj-P@1': metrics['Adj-Rprec/P@1']}}

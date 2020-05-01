@@ -5,9 +5,36 @@ from collections import defaultdict
 from sklearn.metrics import f1_score
 from sklearn.model_selection import GridSearchCV
 from lightning.classification import LinearSVC
+from scidocs.embeddings import load_embeddings_from_jsonl
 
 
 np.random.seed(1)
+
+
+def get_mag_mesh_metrics(data_paths, embeddings_path=None, val_or_test='test'):
+    """Run MAG and MeSH tasks.
+
+    Arguments:
+        data_paths {scidocs.DataPaths} -- A DataPaths objects that points to 
+                                          all of the SciDocs files
+
+    Keyword Arguments:
+        embeddings_path {str} -- Path to the embeddings jsonl (default: {None})
+        val_or_test {str} -- Whether to return metrics on validation set (to tune hyperparams)
+                             or the test set (what's reported in SPECTER paper)
+
+    Returns:
+        metrics {dict} -- F1 score for both tasks.
+    """
+    embeddings = load_embeddings_from_jsonl(embeddings_path)
+
+    X, y = get_X_y_for_classification(embeddings, data_paths.mag_train, data_paths.mag_val, data_paths.mag_test)
+    mag_f1 = classify(X['train'], y['train'], X[val_or_test], y[val_or_test])
+    
+    X, y = get_X_y_for_classification(embeddings, data_paths.mesh_train, data_paths.mesh_val, data_paths.mesh_test)
+    mesh_f1 = classify(X['train'], y['train'], X[val_or_test], y[val_or_test])
+
+    return {'mag': {'f1': mag_f1}, 'mesh': {'f1': mesh_f1}}
 
 
 def classify(X_train, y_train, X_test, y_test):
@@ -25,7 +52,7 @@ def classify(X_train, y_train, X_test, y_test):
     """
     estimator = LinearSVC(loss="squared_hinge", random_state=42)
     Cs = np.logspace(-4, 2, 7)
-    svm = GridSearchCV(estimator=estimator, cv=3, param_grid={'C': Cs})
+    svm = GridSearchCV(estimator=estimator, cv=3, param_grid={'C': Cs}, verbose=2)
     svm.fit(X_train, y_train)
     preds = svm.predict(X_test)
     return 100 * f1_score(y_test, preds, average='macro')

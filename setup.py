@@ -10,5 +10,5 @@ setuptools.setup(
     version='0.0.1',
     url='https://github.com/allenai/scidocs',
     packages=setuptools.find_packages(),
-    install_requires=requirements  # dependencies specified in requirements.in
+    # install_requires=requirements  # dependencies specified in requirements.in
 )
