@@ -60,8 +60,6 @@ class SimpaperRecommender(Model):
                                "expected feedforward input dim",
                                "actual feedforward input dim")
         self.loss = nn.MarginRankingLoss(margin=ranking_loss_margin, reduction='none')
-        # self.loss = nn.CrossEntropyLoss()
-        # self.loss = nn.MarginRankingLoss(margin=ranking_loss_margin)
         self.accuracy = CategoricalAccuracy()
         self.saved_loss = Average()
 
@@ -161,18 +159,6 @@ class SimpaperRecommender(Model):
                                        "Negative paper encoding size", "Expected paper encoding size")
         elif self.encode_title:
             raise NotImplementedError("Paper representation lookup is not yet implemented")
-        # else:
-        #
-        #     if torch.cuda.is_available():
-        #         query_paper_encoding = torch.cuda.FloatTensor([])
-        #         pos_paper_encoding = torch.cuda.FloatTensor([])
-        #         if neg_title:
-        #             neg_paper_encoding = torch.cuda.FloatTensor([])
-        #     else:
-        #         query_paper_encoding = torch.FloatTensor([])
-        #         pos_paper_encoding = torch.FloatTensor([])
-        #         if neg_title:
-        #             neg_paper_encoding = torch.FloatTensor([])
         #pos_features holds additional features about this instance, is (batch size x num_extra_numeric_features)
         if self.project_query:
             proj_query_emb = self.query_projection(query_emb)

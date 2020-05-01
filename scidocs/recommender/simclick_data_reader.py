@@ -211,23 +211,7 @@ class SimClickDataReader(DatasetReader):
         fields['pos_title_match'] = ArrayField(numpy.array([self.title_match(query_title, pos_title)]))
         fields['query_emb'] = ArrayField(numpy.array(self.valueOrZeros(self.paper_embeddings, source_paper, self.embedding_dims)))
         fields['pos_emb'] = ArrayField(numpy.array(self.valueOrZeros(self.paper_embeddings, positive_paper, self.embedding_dims)))
-        # ablation hack:
-        # NOTE, position is ablated by default; to ablate other features, uncomment the corresponding lines below,
-        # here and under "if negative paper" below
         fields['pos_position'] = ArrayField(numpy.array([0]))
-        # fields['pos_author_match'] = ArrayField(numpy.array([0])) # ArrayField(numpy.array([self.author_match(source_paper, positive_paper)]))
-        # fields['pos_citation_overlap'] = ArrayField(numpy.array([0]))
-        # fields['pos_reference_overlap'] = ArrayField(numpy.array([0]))
-        # fields['pos_cites_query'] = ArrayField(numpy.array([0]))
-        # fields['query_cites_pos'] = ArrayField(numpy.array([0]))
-        # fields['pos_oldness'] = ArrayField(numpy.array([0]))
-        # fields['pos_relative_oldness'] = ArrayField(numpy.array([0]))
-        # fields['pos_number_citations'] = ArrayField(numpy.array([0]))
-        # fields['query_title'] = TextField(self._tokenizer.tokenize("query"),self._token_indexers)
-        # fields['pos_title'] = TextField(self._tokenizer.tokenize("empty"),self._token_indexers)
-        # fields['pos_title_match'] = ArrayField(numpy.array([0]))
-        # fields['query_emb'] = ArrayField(numpy.zeros(self.embedding_dims))
-        # fields['pos_emb'] = ArrayField(numpy.zeros(self.embedding_dims))
 
         if negative_paper:
             fields['neg_author_match'] = ArrayField(numpy.array([self.author_match(source_paper, negative_paper)]))
@@ -244,18 +228,6 @@ class SimClickDataReader(DatasetReader):
             fields['neg_title'] = TextField(neg_title,self._token_indexers)
             fields['neg_title_match'] = ArrayField(numpy.array([self.title_match(query_title, neg_title)]))
             fields['neg_emb'] = ArrayField(numpy.array(self.valueOrZeros(self.paper_embeddings, negative_paper, self.embedding_dims)))
-            #ablation hack:
             fields['neg_position'] = ArrayField(numpy.array([0]))
-            # fields['neg_author_match'] = ArrayField(numpy.array([0]))
-            # fields['neg_citation_overlap'] = ArrayField(numpy.array([0]))
-            # fields['neg_reference_overlap'] = ArrayField(numpy.array([0]))
-            # fields['neg_cites_query'] = ArrayField(numpy.array([0]))
-            # fields['query_cites_neg'] = ArrayField(numpy.array([0]))
-            # fields['neg_oldness'] = ArrayField(numpy.array([0]))
-            # fields['neg_relative_oldness'] = ArrayField(numpy.array([0]))
-            # fields['neg_number_citations'] = ArrayField(numpy.array([0]))
-            # fields['neg_title'] = TextField(self._tokenizer.tokenize("empty"),self._token_indexers)
-            # fields['neg_title_match'] = ArrayField(numpy.array([0]))
-            # fields['neg_emb'] = ArrayField(numpy.zeros(self.embedding_dims))
 
         return Instance(fields)
