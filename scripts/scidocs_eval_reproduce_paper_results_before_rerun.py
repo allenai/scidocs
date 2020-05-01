@@ -1,10 +1,12 @@
+
 from scidocs.paths import DataPaths
 from scidocs.embeddings import load_embeddings_from_jsonl
 from scidocs.classification import classify, get_X_y_for_classification
 from scidocs.user_activity_and_citations import get_qrel_metrics, make_run_from_embeddings
+from scidocs.simpaper_click_eval import get_simpaper_metrics
 
 
-# embeddings for all (currently not used)
+#embeddings for all (currently not used)
 embeddings_path = '/net/nfs.corp/s2-research/recommender/scidocs_v1/paper_metadata_embedded.jsonl'
 embeddings = load_embeddings_from_jsonl(embeddings_path)
 
@@ -46,8 +48,12 @@ cite_results = get_qrel_metrics(data_paths.cite_test, run_path, metrics=('ndcg',
 make_run_from_embeddings(data_paths.cocite_test, embeddings_qrel, run_path, topk=5, generate_random_embeddings=False)
 cocite_results = get_qrel_metrics(data_paths.cocite_test, run_path, metrics=('ndcg', 'map'))
 
-print(coview_results, coread_results, cite_results, cocite_results)
 
+dims = 0
+if len(embeddings) > 0:
+    dims = len(next(iter(embeddings.values())))
+CUDA_DEVICE = -1
+simpaper_results = get_simpaper_metrics(data_paths, embeddings_path, run_path, CUDA_DEVICE, dims)
 
-# simpapers code goes below when it's done!
+print(coview_results, coread_results, cite_results, cocite_results, simpaper_results)
 
