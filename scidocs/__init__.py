@@ -31,9 +31,9 @@ def get_scidocs_metrics(data_paths,
         scidocs_metrics {dict} -- SciDocs metrics for all tasks
     """
     
-    metrics = {}
-    metrics.update(get_mag_mesh_metrics(data_paths, classification_embeddings_path))
-    metrics.update(get_view_cite_read_metrics(data_paths, user_activity_and_citations_embeddings_path))
-    metrics.update(get_recomm_metrics(data_paths, get_recomm_metrics))
+    scidocs_metrics = {}
+    scidocs_metrics.update(get_mag_mesh_metrics(data_paths, classification_embeddings_path))
+    scidocs_metrics.update(get_view_cite_read_metrics(data_paths, user_activity_and_citations_embeddings_path))
+    scidocs_metrics.update(get_recomm_metrics(data_paths, get_recomm_metrics))
     
-    return metrics
+    return scidocs_metrics

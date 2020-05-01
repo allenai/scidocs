@@ -1,9 +1,15 @@
-# scidocs
-Dataset accompanying the SPECTER model, as well as evaluation code.
+# SciDocs - The Dataset Evaluation Suite for SPECTER
 
+[**SPECTER**](https://github.com/allenai/specter) |
+[**Paper**](https://arxiv.org/pdf/2004.07180.pdf) 
+
+This repository contains code, link to evaluation data, and instructions to use 
+[SciDocs](https://arxiv.org/pdf/2004.07180.pdf) and a link to the [SPECTER](https://github.com/allenai/scidocs) model.
+
+## Installation
 To install this package, run the following:
 
-```
+```bash
 git clone https://github.com/allenai/scidocs.git
 cd scidocs
 conda create -y --name scidocs python==3.7
@@ -13,19 +19,21 @@ pip install pytrec_eval awscli allennlp==0.9
 python setup.py install
 ```
 
-To obtain the data, run this command after the package is installed:
+To obtain the data, run this command after the package is installed (from inside the `scidocs` folder):
 
 `aws s3 sync --no-sign-request s3://ai2-s2-research-public/specter/scidocs/ data/`
 
-## How To
+## How to run SciDocs
 To obtain SciDocs metrics, you must first embed each entry in the 3 metadata files:
 
-- data/paper_metadata_mag_mesh.json
-- data/paper_metadata_view_cite_read.json
-- data/paper_metadata_recomm.json
+- `data/paper_metadata_mag_mesh.json`
+- `data/paper_metadata_view_cite_read.json`
+- `data/paper_metadata_recomm.json`
 
 The embeddings must then reside in `jsonl` files with one json entry embedding per line, which will look something like this:
 `{"paper_id": "0dfb47e206c762d2f4caeb99fd9019ade78c2c98", "embedding": [-3, -6, 0, ..., 2]}`
+
+TODO: include the SPECTOR embedding.jsonl files and use those in the example instead.
 
 Once you have these 3 embedding files you can get all of the relevant metrics as follows:
 
@@ -46,4 +54,20 @@ scidocs_metrics = get_scidocs_metrics(data_paths,
                                       classification_embeddings_path,
                                       user_activity_and_citations_embeddings_path,
                                       recomm_embeddings_path)
+
+print(scidocs_metrics)
+```
+
+
+## Citation
+
+Please cite the [SPECTER paper](https://arxiv.org/pdf/2004.07180.pdf) as:  
+
+```
+@inproceedings{specter2020cohan,
+  title={SPECTER: Document-level Representation Learning using Citation-informed Transformers},
+  author={Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
+  booktitle={ACL},
+  year={2020}
+}
 ```
