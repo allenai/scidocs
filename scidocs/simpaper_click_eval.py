@@ -133,7 +133,7 @@ def get_simpaper_metrics(data_paths:DataPaths, embeddings_path, run_dir, cuda_de
     os.environ['VALID_PATH'] = data_paths.recomm_val
     os.environ['TEST_PATH'] = data_paths.recomm_test
     os.environ['PROP_SCORE_PATH'] = data_paths.recomm_propensity_scores
-    os.environ['PAPER_METADATA_PATH'] = data_paths.recomm_paper_metadata
+    os.environ['PAPER_METADATA_PATH'] = data_paths.paper_metadata_recomm
     os.environ['jsonlines_embedding_format'] = "true"
     serialization_dir = os.path.join(run_dir, "recomm-tmp")
     simpapers_model_path = os.path.join(serialization_dir, "model.tar.gz")
