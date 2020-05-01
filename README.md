@@ -1,10 +1,11 @@
 # SciDocs - The Dataset Evaluation Suite for SPECTER
 
-[**SPECTER**](https://github.com/allenai/specter) |
+[**SPECTER Public API**](https://github.com/allenai/specter) |
+[**SPECTER Code Base**](https://github.com/allenai/specter-internal)
 [**Paper**](https://arxiv.org/pdf/2004.07180.pdf) 
 
-This repository contains code, link to evaluation data, and instructions to use 
-[SciDocs](https://arxiv.org/pdf/2004.07180.pdf) and a link to the [SPECTER](https://github.com/allenai/scidocs) model.
+This repository contains code, link to data, and instructions to use the
+[SciDocs](https://arxiv.org/pdf/2004.07180.pdf) evaluation suite.
 
 ## Installation
 To install this package, run the following:
