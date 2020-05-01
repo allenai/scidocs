@@ -4,6 +4,7 @@ import math
 import torch
 import os
 import subprocess
+import numpy as np
 
 from allennlp.data.dataset_readers.dataset_reader import DatasetReader
 from allennlp.models import archival
@@ -152,4 +153,7 @@ def get_recomm_metrics(data_paths:DataPaths, embeddings_path, cuda_device=-1):
          '--include-package', 'scidocs.recommender']
     subprocess.run(command)
     metrics = evaluate_ranking_performance(simpapers_model_path, data_paths.recomm_test, int(cuda_device))
-    return {'recomm': {'adj-NDCG': metrics['Adj-ndcg'], 'adj-P@1': metrics['Adj-Rprec/P@1']}}
+    return {'recomm': {
+        'adj-NDCG': np.round(100 * float(metrics['Adj-ndcg']), 2), 
+        'adj-P@1': np.round(100 * float(metrics['Adj-Rprec/P@1']), 2),
+        }}
