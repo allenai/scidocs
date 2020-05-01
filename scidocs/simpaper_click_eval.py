@@ -35,9 +35,9 @@ def evaluate_ranking_performance(archive_path, test_data_path, cuda_device, outp
         sum(adjClickDistribution))
 
     if not paper_features_path_override is None:
-        params['dataset_reader'].params['paper_features_path'] = paper_features_path_override # '/net/nfs.corp/s2-research/recommender/online_experiment/metadata.json'
+        params['dataset_reader'].params['paper_features_path'] = paper_features_path_override
     if not paper_embeddings_path_override is None:
-        params['dataset_reader'].params['paper_embeddings_path'] = paper_embeddings_path_override # '/net/nfs.corp/s2-research/recommender/online_experiment/cite-1hop-finetune.jsonl'
+        params['dataset_reader'].params['paper_embeddings_path'] = paper_embeddings_path_override
 
     dr = DatasetReader.from_params(params['dataset_reader'])
 
@@ -71,8 +71,6 @@ def evaluate_ranking_performance(archive_path, test_data_path, cuda_device, outp
         clicked_position = other_ids.index(clicked_id) + 1
         pos_instance = dr.text_to_instance(query_id, clicked_id, clicked_position)
         pos_score = sr.forward_on_instance(pos_instance)['pos_score']
-        # rank by embedding hack:
-        # pos_score = torch.nn.functional.cosine_similarity(torch.Tensor(pos_instance['pos_emb'].array), torch.Tensor(pos_instance['query_emb'].array), dim=0)
         paper_score.append([clicked_id, pos_score])
         neg_scores = []
         adj = 1 / adjClickDistribution[clicked_position-1]
@@ -80,8 +78,6 @@ def evaluate_ranking_performance(archive_path, test_data_path, cuda_device, outp
             if not other_id == clicked_id:
                 neg_instance = dr.text_to_instance(query_id, other_id, position)
                 score = sr.forward_on_instance(neg_instance)['pos_score']
-                # rank by embedding hack:
-                # score = torch.nn.functional.cosine_similarity(torch.Tensor(neg_instance['pos_emb'].array), torch.Tensor(neg_instance['query_emb'].array), dim=0)
                 neg_scores.append(score)
                 paper_score.append([other_id, score])
             position = position + 1

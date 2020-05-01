@@ -144,7 +144,6 @@ class SimpaperRecommender(Model):
                 neg_title: Dict[str, torch.Tensor] = None,
                 neg_title_match: torch.Tensor = None,
                 neg_emb: torch.Tensor = None):
-        # pylint: disable=unused-argument,arguments-differ
         # query_title["tokens"] is (batch size x num tokens in title)
         batch_size = query_title["tokens"].size(0)
         if self.text_encoder and self.encode_title:
@@ -219,7 +218,6 @@ class SimpaperRecommender(Model):
                              torch.ones_like(positive_paper_score))
             loss = loss / propensity_score
             loss = torch.mean(loss)
-            #loss = self.loss(torch.cat([positive_paper_score, negative_paper_score], dim=1), torch.ones(len(positive_paper_score), dtype=torch.long))
             check_dimensions_match(loss.dim(), 0,
                                    "Loss size", "Expected loss size")
 
