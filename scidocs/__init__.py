@@ -8,6 +8,7 @@ def get_scidocs_metrics(data_paths,
                         user_activity_and_citations_embeddings_path,
                         recomm_embeddings_path,
                         mag_mesh_val_or_test='test',
+                        n_jobs=-1,
                         cuda_device=-1):
     """[summary]
 
@@ -19,6 +20,8 @@ def get_scidocs_metrics(data_paths,
         user_activity_and_citations_embeddings_path {str} -- Path to the embeddings jsonl
                                                              for cocite, cite, coread, coview
         recomm_embeddings_path {str} -- Path to the embeddings jsonl for the recomm task
+        n_jobs -- number of parallel jobs for classification related tasks (-1 to use all cpus)
+        cuda_device -- cuda device for the recommender model
 
     Keyword Arguments:
         mag_mesh_val_or_test {str} -- Whether to return metrics on validation 
@@ -32,8 +35,8 @@ def get_scidocs_metrics(data_paths,
     """
     
     metrics = {}
-    metrics.update(get_mag_mesh_metrics(data_paths, classification_embeddings_path))
+    metrics.update(get_mag_mesh_metrics(data_paths, classification_embeddings_path, n_jobs=n_jobs))
     metrics.update(get_view_cite_read_metrics(data_paths, user_activity_and_citations_embeddings_path))
-    metrics.update(get_recomm_metrics(data_paths, get_recomm_metrics))
+    metrics.update(get_recomm_metrics(data_paths, get_recomm_metrics, cuda_device=cuda_device))
     
     return metrics
