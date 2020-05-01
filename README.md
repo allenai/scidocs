@@ -1,7 +1,7 @@
 # SciDocs - The Dataset Evaluation Suite for SPECTER
 
-[**SPECTER Public API**](https://github.com/allenai/specter) |
-[**SPECTER Code Base**](https://github.com/allenai/specter-internal)
+[**SPECTER Public API**](https://github.com/allenai/paper-embedding-public-apis) |
+[**SPECTER Code Base**](https://github.com/allenai/specter) |
 [**Paper**](https://arxiv.org/pdf/2004.07180.pdf) 
 
 This repository contains code, link to data, and instructions to use the
