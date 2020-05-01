@@ -157,8 +157,6 @@ class SimpaperRecommender(Model):
                 neg_paper_encoding = self._paper_to_vec(neg_title["tokens"])
                 check_dimensions_match(neg_paper_encoding.size(), (batch_size, self.total_paper_output_size),
                                        "Negative paper encoding size", "Expected paper encoding size")
-        elif self.encode_title:
-            raise NotImplementedError("Paper representation lookup is not yet implemented")
         #pos_features holds additional features about this instance, is (batch size x num_extra_numeric_features)
         if self.project_query:
             proj_query_emb = self.query_projection(query_emb)

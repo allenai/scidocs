@@ -8,7 +8,7 @@ except NameError:
     
     
 class DataPaths:
-    def __init__(self, base_path='/net/s2-research/recommender/scidocs_v1'):
+    def __init__(self, base_path='/net/nfs.corp/s2-research/recommender/scidocs_v1'):
         self.base_path = base_path
         
         self.cite_val = os.path.join(base_path, 'cite', 'val.qrel')
