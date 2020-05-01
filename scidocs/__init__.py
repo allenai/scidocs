@@ -37,6 +37,6 @@ def get_scidocs_metrics(data_paths,
     metrics = {}
     metrics.update(get_mag_mesh_metrics(data_paths, classification_embeddings_path, n_jobs=n_jobs))
     metrics.update(get_view_cite_read_metrics(data_paths, user_activity_and_citations_embeddings_path))
-    metrics.update(get_recomm_metrics(data_paths, get_recomm_metrics, cuda_device=cuda_device))
+    metrics.update(get_recomm_metrics(data_paths, recomm_embeddings_path, cuda_device=cuda_device))
     
     return metrics
