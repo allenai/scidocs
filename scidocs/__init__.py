@@ -10,7 +10,8 @@ def get_scidocs_metrics(data_paths,
                         mag_mesh_val_or_test='test',
                         n_jobs=-1,
                         cuda_device=-1):
-    """[summary]
+    """This is the master wrapper that computes the SciDocs metrics given
+    three embedding files (jsonl) and some optional parameters.
 
     Arguments:
         data_paths {scidocs.DataPaths} -- A DataPaths objects that points to 
