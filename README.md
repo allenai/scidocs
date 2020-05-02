@@ -59,6 +59,16 @@ scidocs_metrics = get_scidocs_metrics(data_paths,
 print(scidocs_metrics)
 ```
 
+## Wrapper
+
+To use SciDocs from command line you can use the provided wrapper:
+
+```
+python scripts/run.py \
+--cls /path/to/classification_embeddings.jsonl \
+--coview /path/to/coview_coread_citation_embeddings.jsonl \
+--recomm /path/to/recomm_embeddings.jsonl 
+```
 
 ## Citation
 
