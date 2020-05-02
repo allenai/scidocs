@@ -8,7 +8,9 @@ except NameError:
     
     
 class DataPaths:
-    def __init__(self, base_path=os.path.join(PROJECT_ROOT_PATH, 'data')):
+    def __init__(self, base_path=None):
+        if base_path is None:
+            base_path = os.path.join(PROJECT_ROOT_PATH, 'data')
         self.base_path = base_path
         
         self.cite_val = os.path.join(base_path, 'cite', 'val.qrel')

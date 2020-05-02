@@ -8,8 +8,10 @@ def get_scidocs_metrics(data_paths,
                         user_activity_and_citations_embeddings_path,
                         recomm_embeddings_path,
                         mag_mesh_val_or_test='test',
+                        n_jobs=-1,
                         cuda_device=-1):
-    """[summary]
+    """This is the master wrapper that computes the SciDocs metrics given
+    three embedding files (jsonl) and some optional parameters.
 
     Arguments:
         data_paths {scidocs.DataPaths} -- A DataPaths objects that points to 
@@ -19,6 +21,8 @@ def get_scidocs_metrics(data_paths,
         user_activity_and_citations_embeddings_path {str} -- Path to the embeddings jsonl
                                                              for cocite, cite, coread, coview
         recomm_embeddings_path {str} -- Path to the embeddings jsonl for the recomm task
+        n_jobs -- number of parallel jobs for classification related tasks (-1 to use all cpus)
+        cuda_device -- cuda device for the recommender model
 
     Keyword Arguments:
         mag_mesh_val_or_test {str} -- Whether to return metrics on validation 
