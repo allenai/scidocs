@@ -45,7 +45,7 @@ from scidocs.paths import DataPaths
 # point to the data, which should be in scidocs/data by default
 data_paths = DataPaths()
 
-# point to the generated embeddings.jsonl
+# point to the included embeddings jsonl
 classification_embeddings_path = 'data/specter-embeddings/cls.jsonl'
 user_activity_and_citations_embeddings_path = 'data/specter-embeddings/user-citation.jsonl'
 recomm_embeddings_path = 'data/specter-embeddings/recomm.jsonl'
@@ -69,6 +69,9 @@ And you should see:
 
 Which matches the last row of Table 1 in the SPECTER paper.
 
+To run your models, you need to generate your own embedding jsonl files. To tune hyperparameters,
+you can set the `val_or_test='val'` in the `get_scidocs_metrics` function and use the resulting values as part
+of your objective function.
 
 
 ## Citation
