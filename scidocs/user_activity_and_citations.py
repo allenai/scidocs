@@ -24,10 +24,12 @@ def get_view_cite_read_metrics(data_paths, embeddings_path=None, val_or_test='te
     """
     assert val_or_test in ('val', 'test'), "The val_or_test parameter must be one of 'val' or 'test'"
     
+    print('Loading co-view, co-read, cite, and co-cite embeddings...')
     embeddings = load_embeddings_from_jsonl(embeddings_path)
 
     run_path = os.path.join(data_paths.base_path, 'temp.run')     
 
+    print('Running the co-view, co-read, cite, and co-cite tasks...')
     if val_or_test == 'test':
         make_run_from_embeddings(data_paths.coview_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
         coview_results = qrel_metrics(data_paths.coview_test, run_path, metrics=('ndcg', 'map'))

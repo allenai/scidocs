@@ -28,11 +28,14 @@ def get_mag_mesh_metrics(data_paths, embeddings_path=None, val_or_test='test', n
     """
     assert val_or_test in ('val', 'test'), "The val_or_test parameter must be one of 'val' or 'test'"
     
+    print('Loading MAG/MeSH embeddings...')
     embeddings = load_embeddings_from_jsonl(embeddings_path)
 
+    print('Running the MAG task...')
     X, y = get_X_y_for_classification(embeddings, data_paths.mag_train, data_paths.mag_val, data_paths.mag_test)
     mag_f1 = classify(X['train'], y['train'], X[val_or_test], y[val_or_test], n_jobs=n_jobs)
     
+    print('Running the MeSH task...')
     X, y = get_X_y_for_classification(embeddings, data_paths.mesh_train, data_paths.mesh_val, data_paths.mesh_test)
     mesh_f1 = classify(X['train'], y['train'], X[val_or_test], y[val_or_test], n_jobs=n_jobs)
 
@@ -54,7 +57,7 @@ def classify(X_train, y_train, X_test, y_test, n_jobs=1):
     """
     estimator = LinearSVC(loss="squared_hinge", random_state=42)
     Cs = np.logspace(-4, 2, 7)
-    svm = GridSearchCV(estimator=estimator, cv=3, param_grid={'C': Cs}, verbose=2, n_jobs=n_jobs)
+    svm = GridSearchCV(estimator=estimator, cv=3, param_grid={'C': Cs}, verbose=1, n_jobs=n_jobs)
     svm.fit(X_train, y_train)
     preds = svm.predict(X_test)
     return np.round(100 * f1_score(y_test, preds, average='macro'), 2)

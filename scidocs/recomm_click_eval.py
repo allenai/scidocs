@@ -136,10 +136,12 @@ def get_recomm_metrics(data_paths:DataPaths, embeddings_path, val_or_test='test'
     assert val_or_test in ('val', 'test'), "The val_or_test parameter must be one of 'val' or 'test'"
     # TODO(dougd): return validation metrics of val_or_test == 'val'
     
+    print('Loading recomm embeddings...')
     with open(embeddings_path, 'r') as f:
         line = json.loads(next(f))
         num_dims = len(line['embedding'])
 
+    print('Running the recomm task...')
     config_path = data_paths.recomm_config
     os.environ['CUDA_DEVICE'] = str(cuda_device)
     os.environ['EMBEDDINGS_PATH'] = embeddings_path

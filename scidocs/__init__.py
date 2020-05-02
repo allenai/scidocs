@@ -38,6 +38,6 @@ def get_scidocs_metrics(data_paths,
     scidocs_metrics = {}
     scidocs_metrics.update(get_mag_mesh_metrics(data_paths, classification_embeddings_path, val_or_test=val_or_test, n_jobs=n_jobs))
     scidocs_metrics.update(get_view_cite_read_metrics(data_paths, user_activity_and_citations_embeddings_path, val_or_test=val_or_test))
-    scidocs_metrics.update(get_recomm_metrics(data_paths, get_recomm_metrics, val_or_test=val_or_test, cuda_device=cuda_device))
+    scidocs_metrics.update(get_recomm_metrics(data_paths, recomm_embeddings_path, val_or_test=val_or_test, cuda_device=cuda_device))
     
     return scidocs_metrics
