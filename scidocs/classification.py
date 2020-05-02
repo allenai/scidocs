@@ -15,8 +15,8 @@ def get_mag_mesh_metrics(data_paths, embeddings_path=None, val_or_test='test', n
     """Run MAG and MeSH tasks.
 
     Arguments:
-        data_paths {scidocs.DataPaths} -- A DataPaths objects that points to 
-                                          all of the SciDocs files
+        data_paths {scidocs.paths.DataPaths} -- A DataPaths objects that points to 
+                                                all of the SciDocs files
 
     Keyword Arguments:
         embeddings_path {str} -- Path to the embeddings jsonl (default: {None})
@@ -26,6 +26,8 @@ def get_mag_mesh_metrics(data_paths, embeddings_path=None, val_or_test='test', n
     Returns:
         metrics {dict} -- F1 score for both tasks.
     """
+    assert val_or_test in ('val', 'test'), "The val_or_test parameter must be one of 'val' or 'test'"
+    
     embeddings = load_embeddings_from_jsonl(embeddings_path)
 
     X, y = get_X_y_for_classification(embeddings, data_paths.mag_train, data_paths.mag_val, data_paths.mag_test)

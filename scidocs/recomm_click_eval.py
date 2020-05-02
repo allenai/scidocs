@@ -117,23 +117,29 @@ def evaluate_ranking_performance(archive_path, test_data_path, cuda_device):
     return metrics
 
 
-def get_recomm_metrics(data_paths:DataPaths, embeddings_path, cuda_device=-1):
+def get_recomm_metrics(data_paths:DataPaths, embeddings_path, val_or_test='test', cuda_device=-1):
     """Run the recommendations task evaluation.
 
     Arguments:
-        data_paths {scidocs.DataPaths} -- A DataPaths objects that points to 
-                                          all of the SciDocs files
+        data_paths {scidocs.paths.DataPaths} -- A DataPaths objects that points to 
+                                                all of the SciDocs files
+        embeddings_path {str} -- Path to the embeddings jsonl
 
     Keyword Arguments:
-        embeddings_path {str} -- Path to the embeddings jsonl (default: {None})
+        val_or_test {str} -- Whether to return metrics on validation set (to tune hyperparams)
+                             or the test set (what's reported in SPECTER paper)
         cuda_evice {str} -- For the pytorch model -> which cuda device to use
 
     Returns:
         metrics {dict} -- adj-NDCG and adj-P@1 for the task.
     """
+    assert val_or_test in ('val', 'test'), "The val_or_test parameter must be one of 'val' or 'test'"
+    # TODO(dougd): return validation metrics of val_or_test == 'val'
+    
     with open(embeddings_path, 'r') as f:
         line = json.loads(next(f))
         num_dims = len(line['embedding'])
+
     config_path = data_paths.recomm_config
     os.environ['CUDA_DEVICE'] = str(cuda_device)
     os.environ['EMBEDDINGS_PATH'] = embeddings_path
