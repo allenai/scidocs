@@ -55,7 +55,7 @@ def classify(X_train, y_train, X_test, y_test, n_jobs=1):
     svm = GridSearchCV(estimator=estimator, cv=3, param_grid={'C': Cs}, verbose=2, n_jobs=n_jobs)
     svm.fit(X_train, y_train)
     preds = svm.predict(X_test)
-    return 100 * f1_score(y_test, preds, average='macro')
+    return np.round(100 * f1_score(y_test, preds, average='macro'), 2)
 
 
 def get_X_y_for_classification(embeddings, train_path, val_path, test_path):
