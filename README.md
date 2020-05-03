@@ -63,13 +63,13 @@ scidocs_metrics = get_scidocs_metrics(
 
 print(scidocs_metrics)
 ```
-And you should see:
+And you should see the following output:
 
-``
+`{'mag': {'f1': 81.95}, 'mesh': {'f1': 86.44}, 'co-view': {'map': 83.63, 'ndcg': 91.5}, 'co-read': {'map': 84.46, 'ndcg': 92.39}, 'cite': {'map': 88.3, 'ndcg': 94.88}, 'co-cite': {'map': 88.11, 'ndcg': 94.77}, 'recomm': {'adj-NDCG': 53.9, 'adj-P@1': 20.0}}`
 
-Which matches the last row of Table 1 in the SPECTER paper.
+Which matches exactly the last row of Table 1 in the SPECTER paper. Your results should be identical, with the exception of `recomm` due to CUDA machine-to-machine differences. 
 
-To run your models, you need to generate your own embedding jsonl files. To tune hyperparameters,
+To run your own models, you need to generate your own embedding jsonl files. To tune hyperparameters,
 you can set the `val_or_test='val'` in the `get_scidocs_metrics` function and use the resulting values as part
 of your objective function.
 
@@ -81,7 +81,10 @@ To use SciDocs from command line you can use the provided wrapper:
 python scripts/run.py \
 --cls /path/to/classification_embeddings.jsonl \
 --coview /path/to/coview_coread_citation_embeddings.jsonl \
---recomm /path/to/recomm_embeddings.jsonl 
+--recomm /path/to/recomm_embeddings.jsonl \
+--val_or_test test \
+--n_jobs 12 \
+-- cuda_device -1
 ```
 
 ## Citation
