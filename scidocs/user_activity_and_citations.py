@@ -7,39 +7,58 @@ from collections import defaultdict
 from scidocs.embeddings import load_embeddings_from_jsonl
 
 
-def get_view_cite_read_metrics(data_paths, embeddings_path=None):
+def get_view_cite_read_metrics(data_paths, embeddings_path=None, val_or_test='test'):
     """Run the cocite, coread, coview, cite task evaluations.
 
     Arguments:
-        data_paths {scidocs.DataPaths} -- A DataPaths objects that points to 
-                                          all of the SciDocs files
+        data_paths {scidocs.paths.DataPaths} -- A DataPaths objects that points to 
+                                                all of the SciDocs files
 
     Keyword Arguments:
         embeddings_path {str} -- Path to the embeddings jsonl (default: {None})
+        val_or_test {str} -- Whether to return metrics on validation set (to tune hyperparams)
+                             or the test set (what's reported in SPECTER paper)
 
     Returns:
         metrics {dict} -- NDCG and MAP for all four tasks.
     """
+    assert val_or_test in ('val', 'test'), "The val_or_test parameter must be one of 'val' or 'test'"
+    
+    print('Loading co-view, co-read, cite, and co-cite embeddings...')
     embeddings = load_embeddings_from_jsonl(embeddings_path)
 
     run_path = os.path.join(data_paths.base_path, 'temp.run')     
 
-    make_run_from_embeddings(data_paths.coview_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
-    coview_results = get_qrel_metrics(data_paths.coview_test, run_path, metrics=('ndcg', 'map'))
+    print('Running the co-view, co-read, cite, and co-cite tasks...')
+    if val_or_test == 'test':
+        make_run_from_embeddings(data_paths.coview_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
+        coview_results = qrel_metrics(data_paths.coview_test, run_path, metrics=('ndcg', 'map'))
 
-    make_run_from_embeddings(data_paths.coread_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
-    coread_results = get_qrel_metrics(data_paths.coread_test, run_path, metrics=('ndcg', 'map'))
+        make_run_from_embeddings(data_paths.coread_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
+        coread_results = qrel_metrics(data_paths.coread_test, run_path, metrics=('ndcg', 'map'))
 
-    make_run_from_embeddings(data_paths.cite_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
-    cite_results = get_qrel_metrics(data_paths.cite_test, run_path, metrics=('ndcg', 'map'))
+        make_run_from_embeddings(data_paths.cite_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
+        cite_results = qrel_metrics(data_paths.cite_test, run_path, metrics=('ndcg', 'map'))
 
-    make_run_from_embeddings(data_paths.cocite_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
-    cocite_results = get_qrel_metrics(data_paths.cocite_test, run_path, metrics=('ndcg', 'map'))
+        make_run_from_embeddings(data_paths.cocite_test, embeddings, run_path, topk=5, generate_random_embeddings=False)
+        cocite_results = qrel_metrics(data_paths.cocite_test, run_path, metrics=('ndcg', 'map'))
+    elif val_or_test == 'val':
+        make_run_from_embeddings(data_paths.coview_val, embeddings, run_path, topk=5, generate_random_embeddings=False)
+        coview_results = qrel_metrics(data_paths.coview_val, run_path, metrics=('ndcg', 'map'))
+
+        make_run_from_embeddings(data_paths.coread_val, embeddings, run_path, topk=5, generate_random_embeddings=False)
+        coread_results = qrel_metrics(data_paths.coread_val, run_path, metrics=('ndcg', 'map'))
+
+        make_run_from_embeddings(data_paths.cite_val, embeddings, run_path, topk=5, generate_random_embeddings=False)
+        cite_results = qrel_metrics(data_paths.cite_val, run_path, metrics=('ndcg', 'map'))
+
+        make_run_from_embeddings(data_paths.cocite_val, embeddings, run_path, topk=5, generate_random_embeddings=False)
+        cocite_results = qrel_metrics(data_paths.cocite_val, run_path, metrics=('ndcg', 'map'))
     
     return {'co-view': coview_results, 'co-read': coread_results, 'cite': cite_results, 'co-cite': cocite_results}
 
 
-def get_qrel_metrics(qrel_file, run_file, metrics=('ndcg', 'map')):
+def qrel_metrics(qrel_file, run_file, metrics=('ndcg', 'map')):
     """Get metrics (ndcg and map by default) for a run compared to a qrel file.
 
     Arguments:

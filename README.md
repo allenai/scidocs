@@ -34,7 +34,7 @@ To obtain SciDocs metrics, you must first embed each entry in the 3 metadata fil
 The embeddings must then reside in `jsonl` files with one json entry embedding per line, which will look something like this:
 `{"paper_id": "0dfb47e206c762d2f4caeb99fd9019ade78c2c98", "embedding": [-3, -6, 0, ..., 2]}`
 
-TODO: include the SPECTOR embedding.jsonl files and use those in the example instead.
+We include the SPECTER embeddings as well. Here is how to reproduce the results in the SPECTER paper:
 
 Once you have these 3 embedding files you can get all of the relevant metrics as follows:
 
@@ -45,19 +45,33 @@ from scidocs.paths import DataPaths
 # point to the data, which should be in scidocs/data by default
 data_paths = DataPaths()
 
-# point to the generated embeddings.jsonl
-classification_embeddings_path = 'data/paper_embeddings_mag_mesh.jsonl'
-user_activity_and_citations_embeddings_path = 'data/paper_embeddings_view_cite_read.jsonl'
-recomm_embeddings_path = 'data/paper_embeddings_recomm.jsonl'
+# point to the included embeddings jsonl
+classification_embeddings_path = 'data/specter-embeddings/cls.jsonl'
+user_activity_and_citations_embeddings_path = 'data/specter-embeddings/user-citation.jsonl'
+recomm_embeddings_path = 'data/specter-embeddings/recomm.jsonl'
 
 # now run the evaluation
-scidocs_metrics = get_scidocs_metrics(data_paths,
-                                      classification_embeddings_path,
-                                      user_activity_and_citations_embeddings_path,
-                                      recomm_embeddings_path)
+scidocs_metrics = get_scidocs_metrics(
+    data_paths,
+    classification_embeddings_path,
+    user_activity_and_citations_embeddings_path,
+    recomm_embeddings_path,
+    val_or_test='test',  # set to 'val' if tuning hyperparams
+    n_jobs=12,  # the classification tasks can be parallelized
+    cuda_device=-1  # the recomm task can use a GPU if this is set to 0, 1, etc
+)
 
 print(scidocs_metrics)
 ```
+And you should see:
+
+``
+
+Which matches the last row of Table 1 in the SPECTER paper.
+
+To run your models, you need to generate your own embedding jsonl files. To tune hyperparameters,
+you can set the `val_or_test='val'` in the `get_scidocs_metrics` function and use the resulting values as part
+of your objective function.
 
 
 ## Citation
