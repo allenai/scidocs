@@ -79,12 +79,12 @@ To use SciDocs from command line you can use the provided wrapper:
 
 ```
 python scripts/run.py \
---cls /path/to/classification_embeddings.jsonl \
---user-citation /path/to/coview_coread_citation_embeddings.jsonl \
---recomm /path/to/recomm_embeddings.jsonl \
+--cls data/specter-embeddings/cls.jsonl \
+--user-citation data/specter-embeddings/user-citation.jsonl \
+--recomm data/specter-embeddings/recomm.jsonl \
 --val_or_test test \
---n_jobs 12 \
---cuda_device -1
+--n-jobs 12 \
+--cuda-device -1
 ```
 
 ## Citation
