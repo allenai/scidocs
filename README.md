@@ -73,6 +73,16 @@ To run your models, you need to generate your own embedding jsonl files. To tune
 you can set the `val_or_test='val'` in the `get_scidocs_metrics` function and use the resulting values as part
 of your objective function.
 
+## Wrapper
+
+To use SciDocs from command line you can use the provided wrapper:
+
+```
+python scripts/run.py \
+--cls /path/to/classification_embeddings.jsonl \
+--coview /path/to/coview_coread_citation_embeddings.jsonl \
+--recomm /path/to/recomm_embeddings.jsonl 
+```
 
 ## Citation
 
