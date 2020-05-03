@@ -67,7 +67,7 @@ And you should see the following output:
 
 `{'mag': {'f1': 81.95}, 'mesh': {'f1': 86.44}, 'co-view': {'map': 83.63, 'ndcg': 91.5}, 'co-read': {'map': 84.46, 'ndcg': 92.39}, 'cite': {'map': 88.3, 'ndcg': 94.88}, 'co-cite': {'map': 88.11, 'ndcg': 94.77}, 'recomm': {'adj-NDCG': 53.9, 'adj-P@1': 20.0}}`
 
-Which matches exactly the last row of Table 1 in the SPECTER paper. Your results should be identical, with the exception of `recomm` due to CUDA machine-to-machine differences. 
+Which matches exactly the last row of Table 1 in the SPECTER paper. Your results should be identical, with the exception of `recomm` due to a lack of reproducibility guarantees from PyTorch: https://pytorch.org/docs/stable/notes/randomness.html. 
 
 To run your own models, you need to generate your own embedding jsonl files. To tune hyperparameters,
 you can set the `val_or_test='val'` in the `get_scidocs_metrics` function and use the resulting values as part
