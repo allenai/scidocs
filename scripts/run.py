@@ -4,6 +4,7 @@ from scidocs import get_scidocs_metrics
 
 import argparse
 import json
+import pandas as pd
 
 def main():
     parser = argparse.ArgumentParser()
@@ -28,7 +29,16 @@ def main():
         cuda_device=args.cuda_device
     )
 
-    print(json.dumps(scidocs_metrics, indent=2))
+    flat_metrics = {}
+    for k, v in scidocs_metrics.items():
+        if not isinstance(v, dict):
+            flat_metrics[k] = v
+        else:
+            for kk, vv in v.items():
+                key = k + '-' + kk
+                flat_metrics[key] = vv
+    df = pd.DataFrame(list(flat_metrics.items())).T
+    print(df)
 
 if __name__ == '__main__':
     main()
