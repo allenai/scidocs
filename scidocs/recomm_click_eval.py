@@ -164,7 +164,8 @@ def get_recomm_metrics(data_paths:DataPaths, embeddings_path, val_or_test='test'
          'train', config_path, '-s', serialization_dir,
          '--include-package', 'scidocs.recommender']
     subprocess.run(command)
-    metrics = evaluate_ranking_performance(simpapers_model_path, data_paths.recomm_test, int(cuda_device))
+    metrics = evaluate_ranking_performance(simpapers_model_path, data_paths.recomm_test if val_or_test=='test'
+       else data_paths.recomm_val, int(cuda_device))
     return {'recomm': {
         'adj-NDCG': np.round(100 * float(metrics['Adj-ndcg']), 2), 
         'adj-P@1': np.round(100 * float(metrics['Adj-Rprec/P@1']), 2),
