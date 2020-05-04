@@ -1,10 +1,7 @@
 import os
 
 
-try:
-    PROJECT_ROOT_PATH = os.path.abspath(os.path.join(__file__, '../..'))
-except NameError:
-    PROJECT_ROOT_PATH = os.path.abspath(os.path.join(os.getcwd()))
+PROJECT_ROOT_PATH = os.path.abspath(os.path.join(os.getcwd()))
     
     
 class DataPaths:
