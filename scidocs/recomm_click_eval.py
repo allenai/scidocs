@@ -148,7 +148,11 @@ def get_recomm_metrics(data_paths:DataPaths, embeddings_path, val_or_test='test'
     os.environ['EMBEDDINGS_DIM'] = str(num_dims)
     os.environ['TRAIN_PATH'] = data_paths.recomm_train
     os.environ['VALID_PATH'] = data_paths.recomm_val
-    os.environ['TEST_PATH'] = data_paths.recomm_test
+    if val_or_test == 'test':
+        os.environ['TEST_PATH'] = data_paths.recomm_test
+    else:
+        os.environ['TEST_PATH'] = data_paths.recomm_val
+        os.environ['VALID_PATH'] = ""
     os.environ['PROP_SCORE_PATH'] = data_paths.recomm_propensity_scores
     os.environ['PAPER_METADATA_PATH'] = data_paths.paper_metadata_recomm
     os.environ['jsonlines_embedding_format'] = "true"
