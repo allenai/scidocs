@@ -6,6 +6,10 @@ import argparse
 import json
 import pandas as pd
 
+
+pd.set_option('display.max_columns', None)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cls', '--classification-embeddings-path', dest='cls', help='path to classification related embeddings (mesh and mag)')
