@@ -15,7 +15,7 @@ git clone https://github.com/allenai/scidocs.git
 cd scidocs
 conda create -y --name scidocs python==3.7
 conda activate scidocs
-conda install -y -q -c conda-forge numpy pandas scikit-learn jsonlines tqdm sklearn-contrib-lightning pytorch
+conda install -y -q -c conda-forge numpy pandas scikit-learn=0.22.2 jsonlines tqdm sklearn-contrib-lightning pytorch
 pip install pytrec_eval awscli allennlp==0.9
 python setup.py install
 ```
