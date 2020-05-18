@@ -148,7 +148,11 @@ def get_recomm_metrics(data_paths:DataPaths, embeddings_path, val_or_test='test'
     os.environ['EMBEDDINGS_DIM'] = str(num_dims)
     os.environ['TRAIN_PATH'] = data_paths.recomm_train
     os.environ['VALID_PATH'] = data_paths.recomm_val
-    os.environ['TEST_PATH'] = data_paths.recomm_test
+    if val_or_test == 'test':
+        os.environ['TEST_PATH'] = data_paths.recomm_test
+    else:
+        os.environ['TEST_PATH'] = data_paths.recomm_val
+        os.environ['VALID_PATH'] = ""
     os.environ['PROP_SCORE_PATH'] = data_paths.recomm_propensity_scores
     os.environ['PAPER_METADATA_PATH'] = data_paths.paper_metadata_recomm
     os.environ['jsonlines_embedding_format'] = "true"
@@ -160,7 +164,8 @@ def get_recomm_metrics(data_paths:DataPaths, embeddings_path, val_or_test='test'
          'train', config_path, '-s', serialization_dir,
          '--include-package', 'scidocs.recommender']
     subprocess.run(command)
-    metrics = evaluate_ranking_performance(simpapers_model_path, data_paths.recomm_test, int(cuda_device))
+    metrics = evaluate_ranking_performance(simpapers_model_path, data_paths.recomm_test if val_or_test=='test'
+       else data_paths.recomm_val, int(cuda_device))
     return {'recomm': {
         'adj-NDCG': np.round(100 * float(metrics['Adj-ndcg']), 2), 
         'adj-P@1': np.round(100 * float(metrics['Adj-Rprec/P@1']), 2),

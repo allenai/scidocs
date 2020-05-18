@@ -15,7 +15,7 @@ git clone https://github.com/allenai/scidocs.git
 cd scidocs
 conda create -y --name scidocs python==3.7
 conda activate scidocs
-conda install -y -q -c conda-forge numpy pandas scikit-learn=0.22.2 jsonlines tqdm sklearn-contrib-lightning
+conda install -y -q -c conda-forge numpy pandas scikit-learn=0.22.2 jsonlines tqdm sklearn-contrib-lightning pytorch
 pip install pytrec_eval awscli allennlp==0.9
 python setup.py install
 ```
@@ -23,6 +23,9 @@ python setup.py install
 To obtain the data, run this command after the package is installed (from inside the `scidocs` folder):
 
 `aws s3 sync --no-sign-request s3://ai2-s2-research-public/specter/scidocs/ data/`
+
+## Windows Support
+Because `pytrec_eval` does not support Windows, you won't be able to install `SciDocs` on Windows. The data, however, is still accessible via the `awscli` command above.
 
 ## How to run SciDocs
 To obtain SciDocs metrics, you must first embed each entry in the 3 metadata files:
