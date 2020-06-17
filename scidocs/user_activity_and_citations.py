@@ -166,10 +166,10 @@ def make_run_from_embeddings(qrel_file, embeddings, run_file, topk=5, generate_r
             # output is in this format: [qid iter paperid rank similarity run_id]
             if sorted_dists[i][0] in added:
                 continue
-            if i < topk:
-                results.append([pid, '0', sorted_dists[i][0], '1', str(np.round(sorted_dists[i][1], 5)), 'n/a'])
-            else:
+            if i < len(sorted_dists) - topk:
                 results.append([pid, '0', sorted_dists[i][0], '0', str(np.round(sorted_dists[i][1], 5)), 'n/a'])
+            else:
+                results.append([pid, '0', sorted_dists[i][0], '1', str(np.round(sorted_dists[i][1], 5)), 'n/a'])
             added.add(sorted_dists[i][0])
 
     pathlib.Path(run_file).parent.mkdir(parents=True, exist_ok=True)
