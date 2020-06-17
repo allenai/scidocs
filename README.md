@@ -90,6 +90,47 @@ python scripts/run.py \
 --cuda-device -1
 ```
 
+## MAG and MeSH Class Labels
+The MAG and MeSH datasets included with this repo have integer labels starting at 0. Here is how these integers map to class names. 
+
+For MeSH:
+```
+0 	 Cardiovascular diseases
+1 	 Chronic kidney disease
+2 	 Chronic respiratory diseases
+3 	 Diabetes mellitus
+4 	 Digestive diseases
+5 	 HIV/AIDS
+6 	 Hepatitis A/B/C/E
+7 	 Mental disorders
+8 	 Musculoskeletal disorders
+9 	 Neoplasms (cancer)
+10 	 Neurological disorders
+```
+
+And for MAG:
+```
+0	Art
+1	Biology
+2	Business
+3	Chemistry
+4	Computer science
+5	Economics
+6	Engineering
+7	Environmental science
+8	Geography
+9	Geology
+10	History
+11	Materials science
+12	Mathematics
+13	Medicine
+14	Philosophy
+15	Physics
+16	Political science
+17	Psychology
+18	Sociology
+```
+
 ## Citation
 
 Please cite the [SPECTER paper](https://arxiv.org/pdf/2004.07180.pdf) as:  
