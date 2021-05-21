@@ -6,5 +6,6 @@ tqdm
 sklearn-contrib-lightning
 pytrec_eval
 allennlp==0.9
+overrides==3.1.0
 awscli
 jsonnet
