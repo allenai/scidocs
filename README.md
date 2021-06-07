@@ -21,7 +21,7 @@ python setup.py install
 ```
 
 To obtain the data, run this command after the package is installed (from inside the `scidocs` folder):  
-```[Expected download size is: 3.3 GiB]```
+```[Expected download size is: 4.6 GiB]```
 
 `aws s3 sync --no-sign-request s3://ai2-s2-research-public/specter/scidocs/ data/`
 
