@@ -25,6 +25,8 @@ To obtain the data, run this command after the package is installed (from inside
 
 `aws s3 sync --no-sign-request s3://ai2-s2-research-public/specter/scidocs/ data/`
 
+Note: if you're having issues, make sure you're in the `us-west-2` region.
+
 ## Windows Support
 Because `pytrec_eval` does not support Windows, you won't be able to install `SciDocs` on Windows. The data, however, is still accessible via the `awscli` command above.
 
