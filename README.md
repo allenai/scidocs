@@ -134,6 +134,10 @@ And for MAG:
 18	Sociology
 ```
 
+## Errata
+
+The SPECTER paper erroneously lists the number of training examples in the recommendations task as 20K.  The correct value is 4K.
+
 ## Citation
 
 Please cite the [SPECTER paper](https://arxiv.org/pdf/2004.07180.pdf) as:  
