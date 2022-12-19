@@ -7,6 +7,11 @@
 This repository contains code, link to data, and instructions to use the
 [SciDocs](https://arxiv.org/pdf/2004.07180.pdf) evaluation suite.
 
+## Use SciRepEval Instead
+As of December 2022, the Semantic Scholar research team recommends that you use [SciRepEval](https://github.com/allenai/scirepeval) instead of SciDocs for your embedding testing needs.
+It includes most of the SciDocs tasks as a subset, but has many more diverse tasks (classification, regression, search, nearest neighbors), a number of which
+are much larger and designed for training instead of evaluation. 
+
 ## Installation
 To install this package, run the following:
 
